@@ -10,7 +10,7 @@
   </div>
   <div class="endGameGUI" v-if="gameWinner">
     <h3>{{ gameWinner }} win the game !</h3>
-    <button>Restart Game</button>
+    <button @click="restartGame">Restart Game</button>
   </div>
   <div class="gameControlsGUI" v-if="gameWinner === null">
     <button @click="attackEnemy">Attack</button>
@@ -95,6 +95,13 @@ export default {
       this.specialAttackCountdown--;
       this.healCountdown = 3;
       this.attackPlayer();
+    },
+    restartGame() {
+      this.playerHealth = 100;
+      this.enemyHealth = 100;
+      this.gameWinner = null;
+      this.specialAttackCountdown = 0;
+      this.healCountdown = 0;
     },
   },
 };
