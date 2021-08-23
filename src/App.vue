@@ -14,6 +14,9 @@
   </div>
   <div class="gameControlsGUI" v-if="gameWinner === null">
     <button @click="attackEnemy">Attack</button>
+    <button @click="specialAttackEnemy" :disabled="!specialAttackAvailability">
+      Special Attack
+    </button>
   </div>
 </template>
 
@@ -24,6 +27,7 @@ export default {
       playerHealth: 100,
       enemyHealth: 100,
       gameWinner: null,
+      specialAttackCountdown: 0,
     };
   },
   watch: {
@@ -51,16 +55,29 @@ export default {
       }
       return { width: this.enemyHealth + "%" };
     },
+    specialAttackAvailability() {
+      if (this.specialAttackCountdown <= 0) {
+        return true;
+      }
+      return false;
+    },
   },
   methods: {
     attackEnemy() {
       const attackPoint = Math.floor(Math.random() * (15 - 5) + 5);
       this.enemyHealth -= attackPoint;
+      this.specialAttackCountdown--;
       this.attackPlayer();
     },
     attackPlayer() {
       const attackPoint = Math.floor(Math.random() * (15 - 5) + 5);
       this.playerHealth -= attackPoint;
+    },
+    specialAttackEnemy() {
+      const attackPoint = Math.floor(Math.random() * (25 - 15) + 15);
+      this.enemyHealth -= attackPoint;
+      this.specialAttackCountdown = 3;
+      this.attackPlayer();
     },
   },
 };
