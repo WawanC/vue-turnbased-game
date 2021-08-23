@@ -19,6 +19,12 @@
     </button>
     <button @click="healPlayer" :disabled="!healAvailability">Heal</button>
   </div>
+  <div class="battleLogGUI">
+    <h3>Battle Log</h3>
+    <ul v-if="battleLog.length > 0">
+      <li v-for="log in battleLog" :key="log">{{ log }}</li>
+    </ul>
+  </div>
 </template>
 
 <script>
@@ -30,6 +36,7 @@ export default {
       gameWinner: null,
       specialAttackCountdown: 0,
       healCountdown: 0,
+      battleLog: [],
     };
   },
   watch: {
@@ -76,17 +83,20 @@ export default {
       this.enemyHealth -= attackPoint;
       this.specialAttackCountdown--;
       this.healCountdown--;
+      this.addLog("Player", "attack", attackPoint);
       this.attackPlayer();
     },
     attackPlayer() {
       const attackPoint = Math.floor(Math.random() * (15 - 5) + 5);
       this.playerHealth -= attackPoint;
+      this.addLog("Enemy", "attack", attackPoint);
     },
     specialAttackEnemy() {
       const attackPoint = Math.floor(Math.random() * (25 - 15) + 15);
       this.enemyHealth -= attackPoint;
       this.specialAttackCountdown = 3;
       this.healCountdown--;
+      this.addLog("Player", "attack", attackPoint);
       this.attackPlayer();
     },
     healPlayer() {
@@ -94,6 +104,7 @@ export default {
       this.playerHealth += healPoint;
       this.specialAttackCountdown--;
       this.healCountdown = 3;
+      this.addLog("Player", "heal", healPoint);
       this.attackPlayer();
     },
     restartGame() {
@@ -102,6 +113,10 @@ export default {
       this.gameWinner = null;
       this.specialAttackCountdown = 0;
       this.healCountdown = 0;
+      this.battleLog = [];
+    },
+    addLog(who, what, points) {
+      this.battleLog.unshift(`${who} ${what} for ${points} points.`);
     },
   },
 };
