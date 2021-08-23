@@ -2,14 +2,14 @@
   <h1>VueJS Turn-Based Game</h1>
   <div class="healthGUI">
     <h2>Enemy</h2>
-    <div class="enemyHealthBar"></div>
+    <div class="enemyHealthBar" :style="enemyHealthStyles"></div>
   </div>
   <div class="healthGUI">
     <h2>Player</h2>
-    <div class="playerHealthBar"></div>
+    <div class="playerHealthBar" :style="playerHealthStyles"></div>
   </div>
   <div class="gameControlsGUI">
-    <button>Attack</button>
+    <button @click="attackEnemy">Attack</button>
   </div>
 </template>
 
@@ -17,8 +17,28 @@
 export default {
   data() {
     return {
-      nama: "wawan",
+      playerHealth: 100,
+      enemyHealth: 100,
     };
+  },
+  computed: {
+    playerHealthStyles() {
+      return { width: this.playerHealth + "%" };
+    },
+    enemyHealthStyles() {
+      return { width: this.enemyHealth + "%" };
+    },
+  },
+  methods: {
+    attackEnemy() {
+      const attackPoint = Math.floor(Math.random() * (15 - 5) + 5);
+      this.enemyHealth -= attackPoint;
+      this.attackPlayer();
+    },
+    attackPlayer() {
+      const attackPoint = Math.floor(Math.random() * (15 - 5) + 5);
+      this.playerHealth -= attackPoint;
+    },
   },
 };
 </script>
@@ -29,7 +49,6 @@ export default {
 }
 .enemyHealthBar,
 .playerHealthBar {
-  width: 100%;
   height: 50px;
   border-radius: 10px;
 }
