@@ -8,7 +8,11 @@
     <h2>Player</h2>
     <div class="playerHealthBar" :style="playerHealthStyles"></div>
   </div>
-  <div class="gameControlsGUI">
+  <div class="endGameGUI" v-if="gameWinner">
+    <h3>{{ gameWinner }} win the game !</h3>
+    <button>Restart Game</button>
+  </div>
+  <div class="gameControlsGUI" v-if="gameWinner === null">
     <button @click="attackEnemy">Attack</button>
   </div>
 </template>
@@ -19,7 +23,20 @@ export default {
     return {
       playerHealth: 100,
       enemyHealth: 100,
+      gameWinner: null,
     };
+  },
+  watch: {
+    playerHealth(value) {
+      if (value <= 0) {
+        this.gameWinner = "Enemy";
+      }
+    },
+    enemyHealth(value) {
+      if (value <= 0) {
+        this.gameWinner = "Player";
+      }
+    },
   },
   computed: {
     playerHealthStyles() {
@@ -78,7 +95,8 @@ export default {
 .gameControlsGUI {
   padding: 20px;
 }
-.gameControlsGUI button {
+.gameControlsGUI button,
+.endGameGUI button {
   font-size: 16pt;
   padding: 15px;
   border-radius: 10px;
