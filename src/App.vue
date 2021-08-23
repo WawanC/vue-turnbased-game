@@ -17,6 +17,7 @@
     <button @click="specialAttackEnemy" :disabled="!specialAttackAvailability">
       Special Attack
     </button>
+    <button @click="healPlayer" :disabled="!healAvailability">Heal</button>
   </div>
 </template>
 
@@ -28,6 +29,7 @@ export default {
       enemyHealth: 100,
       gameWinner: null,
       specialAttackCountdown: 0,
+      healCountdown: 0,
     };
   },
   watch: {
@@ -61,12 +63,19 @@ export default {
       }
       return false;
     },
+    healAvailability() {
+      if (this.healCountdown <= 0) {
+        return true;
+      }
+      return false;
+    },
   },
   methods: {
     attackEnemy() {
       const attackPoint = Math.floor(Math.random() * (15 - 5) + 5);
       this.enemyHealth -= attackPoint;
       this.specialAttackCountdown--;
+      this.healCountdown--;
       this.attackPlayer();
     },
     attackPlayer() {
@@ -77,6 +86,14 @@ export default {
       const attackPoint = Math.floor(Math.random() * (25 - 15) + 15);
       this.enemyHealth -= attackPoint;
       this.specialAttackCountdown = 3;
+      this.healCountdown--;
+      this.attackPlayer();
+    },
+    healPlayer() {
+      const healPoint = Math.floor(Math.random() * (20 - 10) + 10);
+      this.playerHealth += healPoint;
+      this.specialAttackCountdown--;
+      this.healCountdown = 3;
       this.attackPlayer();
     },
   },
