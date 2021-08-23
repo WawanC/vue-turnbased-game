@@ -23,9 +23,15 @@ export default {
   },
   computed: {
     playerHealthStyles() {
+      if (this.playerHealth < 0) {
+        return { width: "0%" };
+      }
       return { width: this.playerHealth + "%" };
     },
     enemyHealthStyles() {
+      if (this.enemyHealth < 0) {
+        return { width: "0%" };
+      }
       return { width: this.enemyHealth + "%" };
     },
   },
@@ -46,6 +52,7 @@ export default {
 <style>
 .healthGUI {
   width: 25%;
+  position: relative;
 }
 .enemyHealthBar,
 .playerHealthBar {
@@ -57,6 +64,16 @@ export default {
 }
 .playerHealthBar {
   background-color: green;
+}
+.enemyHealthBar::before,
+.playerHealthBar::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  width: 100%;
+  border-radius: 10px;
+  height: 50px;
+  background-color: grey;
 }
 .gameControlsGUI {
   padding: 20px;
