@@ -14,7 +14,9 @@
   </div>
   <div class="endGameGUI" v-if="gameWinner">
     <h3>{{ gameWinner }} win the game !</h3>
-    <button @click="restartGame">Restart Game</button>
+    <button @click="restartGame">
+      <i class="fa fa-refresh" aria-hidden="true"></i> Restart Game
+    </button>
   </div>
   <div class="gameControlsGUI" v-if="gameWinner === null">
     <button @click="attackEnemy" id="attackButton">
